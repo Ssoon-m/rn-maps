@@ -1,7 +1,7 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {AuthStackParamList} from '../navigation/AuthStackNavigator';
+import {AuthStackParamList} from '../navigations/stack/AuthStackNavigator';
 
 type LoginScreenProps = StackScreenProps<AuthStackParamList>;
 
