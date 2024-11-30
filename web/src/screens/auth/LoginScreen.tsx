@@ -1,6 +1,6 @@
 import {StackScreenProps} from '@react-navigation/stack';
-import React from 'react';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import React, {useRef} from 'react';
+import {SafeAreaView, StyleSheet, TextInput, View} from 'react-native';
 import {AuthStackParamList} from '../../navigations/stack/AuthStackNavigator';
 import InputField from '../../shared/components/InputField';
 import Button from '../../shared/components/Button';
@@ -10,6 +10,7 @@ import {validateLogin} from '../../shared/utils';
 type LoginScreenProps = StackScreenProps<AuthStackParamList>;
 
 function LoginScreen({}: LoginScreenProps) {
+  const passwordRef = useRef<TextInput | null>(null);
   const login = useForm({
     initialValue: {email: '', password: ''},
     validate: validateLogin,
@@ -22,17 +23,25 @@ function LoginScreen({}: LoginScreenProps) {
     <SafeAreaView style={styles.container}>
       <View style={styles.inputContainer}>
         <InputField
+          autoFocus
           placeholder="이메일"
           error={login.errors.email}
           touched={login.touched.email}
           inputMode="email"
+          blurOnSubmit={false}
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current?.focus()}
           {...login.getTextInputProps('email')}
         />
         <InputField
+          ref={passwordRef}
           placeholder="비밀번호"
           error={login.errors.password}
           touched={login.touched.password}
           secureTextEntry
+          blurOnSubmit={false}
+          returnKeyType="join"
+          onSubmitEditing={handleSubmit}
           {...login.getTextInputProps('password')}
         />
       </View>
