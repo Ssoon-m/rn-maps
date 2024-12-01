@@ -1,6 +1,4 @@
-## Matzip Server
-
-> Inflearn, Kyo
+# Server
 
 ## 실행
 
@@ -30,7 +28,7 @@ JWT_REFRESH_TOKEN_EXPIRATION=30d
 3. 개발 환경 실행
 
 ```
-npm run start:dev
+docker-compose up -d
 ```
 
 <br>
