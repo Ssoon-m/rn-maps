@@ -1,0 +1,35 @@
+version: '3' # 버전 지정
+
+services: # 컨테이너 설정
+  db:
+    container_name: rn-maps-postgres
+    restart: always
+    image: postgres:14
+    environment:
+      POSTGRES_USER: ${DB_USERNAME} # PostgreSQL 사용자 이름
+      POSTGRES_PASSWORD: ${DB_PASSWORD} # PostgreSQL 비밀번호
+      POSTGRES_DB: ${DB_DATABASE} # 기본으로 생성될 데이터베이스 이름
+    ports:
+      - '5432:5432' # 호스트와 컨테이너의 PostgreSQL 포트 매핑
+  server:
+    container_name: rn-maps-server
+    restart: on-failure:10
+    image: rn-maps-server
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
+    ports:
+      - '3030:3030'
+    environment:
+      PORT: ${PORT}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_HOST: ${DB_HOST} # 로컬에서 실행중이면 localhost, 로컬에서 컨테이너로 실행중이면 db의 컨테이너 이름, 원격 서버면 해당 서버 IP 또는 도메인
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_TOKEN_EXPIRATION: ${JWT_ACCESS_TOKEN_EXPIRATION}
+      JWT_REFRESH_TOKEN_EXPIRATION: ${JWT_REFRESH_TOKEN_EXPIRATION}
+    command: ['sh', '-c', 'sleep 20 && npm run start:dev']
