@@ -8,12 +8,15 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import RootNavigator from './src/navigations/root/RootNavigator';
+import ReactQueryProvider from './src/providers/ReactQueryProvider';
 
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <RootNavigator />
-    </NavigationContainer>
+    <ReactQueryProvider>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </ReactQueryProvider>
   );
 }
 

@@ -6,17 +6,19 @@ import InputField from '../../shared/components/InputField';
 import Button from '../../shared/components/Button';
 import {useForm} from '../../shared/hooks/useForm';
 import {validateLogin} from '../../shared/utils';
+import useAuth from '../../shared/hooks/queries/useAuth';
 
 type LoginScreenProps = StackScreenProps<AuthStackParamList>;
 
 function LoginScreen({}: LoginScreenProps) {
   const passwordRef = useRef<TextInput | null>(null);
+  const {loginMutation} = useAuth();
   const login = useForm({
     initialValue: {email: '', password: ''},
     validate: validateLogin,
   });
   const handleSubmit = () => {
-    console.log('inputs', login.values);
+    loginMutation.mutate(login.values);
   };
 
   return (
