@@ -6,7 +6,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [GMSServices provideAPIKey:@"AIzaSyCl3rSInyxF-KsxAlCY0qhJdcn-7S7RJzU"];
+// Info.plist에서 GOOGLE_MAPS_API_KEY 값을 읽어온다.
+  NSString *googleMapsApiKey = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"GoogleMapsApiKey"];
+  [GMSServices provideAPIKey:googleMapsApiKey];
+
   self.moduleName = @"rnMaps";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
