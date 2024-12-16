@@ -6,7 +6,7 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
 function MapHomeScreen() {
   const {logoutMutation} = useAuth();
-  return <MapView style={styles.container} provider={PROVIDER_GOOGLE} />;
+  return <MapView style={styles.container} provider={PROVIDER_GOOGLE} showsUserLocation={true} followsUserLocation={true} showsMyLocationButton={true}/>;
 }
 
 const styles = StyleSheet.create({
