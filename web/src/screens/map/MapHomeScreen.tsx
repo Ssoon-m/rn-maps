@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import useAuth from '../../shared/hooks/queries/useAuth';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {colors} from '@/constants';
@@ -12,6 +12,7 @@ import {MainDrawerParamList} from '@/navigations/drawer/MainDrawerNavigator.tsx'
 import useUserLocation from '@/screens/map/hooks/useUserLocation.ts';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import MeterialIcons from '@react-native-vector-icons/material-icons';
+import {mapStyle} from '@/style/mapStyle.ts';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -25,6 +26,8 @@ function MapHomeScreen() {
   const {userLocation, isUserLocationError} = useUserLocation();
 
   const mapRef = useRef<MapView | null>(null);
+
+  console.log('userLocation', userLocation);
 
   const handlePressuserLocation = () => {
     if (isUserLocationError) {
@@ -48,6 +51,7 @@ function MapHomeScreen() {
         showsUserLocation={true}
         followsUserLocation={true}
         showsMyLocationButton={false}
+        customMapStyle={mapStyle}
       />
       <Pressable
         style={[styles.drawerButton, {top: inset.top || 20}]}
