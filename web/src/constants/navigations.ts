@@ -1,7 +1,7 @@
 const mainNavigations = {
   HOME: 'Home',
   FEED: 'Feed',
-  CALENDDAR: 'Calendar',
+  CALENDAR: 'Calendar',
 } as const;
 
 const authNavigations = {
