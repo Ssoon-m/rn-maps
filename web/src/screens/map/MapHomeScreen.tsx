@@ -1,7 +1,13 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import useAuth from '../../shared/hooks/queries/useAuth';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {
+  Callout,
+  LatLng,
+  LongPressEvent,
+  Marker,
+  PROVIDER_GOOGLE,
+} from 'react-native-maps';
 import {colors} from '@/constants';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
@@ -24,10 +30,27 @@ function MapHomeScreen() {
   const {logoutMutation} = useAuth();
   const navigation = useNavigation<Navigation>();
   const {userLocation, isUserLocationError} = useUserLocation();
+  const [selectLocation, setSelectLocation] = useState<LatLng>();
 
   const mapRef = useRef<MapView | null>(null);
 
   console.log('userLocation', userLocation);
+  const handleLogout = () => {
+    logoutMutation.mutate(null);
+  };
+
+  useEffect(() => {
+    mapRef.current?.animateToRegion({
+      latitude: userLocation.latitude,
+      longitude: userLocation.longitude,
+      longitudeDelta: 0.0421,
+      latitudeDelta: 0.0922,
+    });
+  }, [mapRef.current]);
+
+  const handleLongPressMapView = ({nativeEvent}: LongPressEvent) => {
+    setSelectLocation(nativeEvent.coordinate);
+  };
 
   const handlePressuserLocation = () => {
     if (isUserLocationError) {
@@ -52,7 +75,25 @@ function MapHomeScreen() {
         followsUserLocation={true}
         showsMyLocationButton={false}
         customMapStyle={mapStyle}
-      />
+        onLongPress={handleLongPressMapView}>
+        <Marker
+          coordinate={{
+            latitude: 37.5516032365118,
+            longitude: 126.98989626020192,
+          }}
+        />
+        <Marker
+          coordinate={{
+            latitude: 37.5616032365118,
+            longitude: 126.98989626020192,
+          }}
+        />
+        {selectLocation && (
+          <Callout>
+            <Marker coordinate={selectLocation} />
+          </Callout>
+        )}
+      </MapView>
       <Pressable
         style={[styles.drawerButton, {top: inset.top || 20}]}
         onPress={() => navigation.openDrawer()}>
