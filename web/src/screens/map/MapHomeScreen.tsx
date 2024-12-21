@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {Alert, Pressable, StyleSheet, View} from 'react-native';
 import useAuth from '../../shared/hooks/queries/useAuth';
 import MapView, {
   Callout,
@@ -8,7 +8,7 @@ import MapView, {
   Marker,
   PROVIDER_GOOGLE,
 } from 'react-native-maps';
-import {colors} from '@/constants';
+import {alerts, colors, mapNavigations} from '@/constants';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -35,7 +35,6 @@ function MapHomeScreen() {
 
   const mapRef = useRef<MapView | null>(null);
 
-  console.log('userLocation', userLocation);
   const handleLogout = () => {
     logoutMutation.mutate(null);
   };
@@ -53,7 +52,20 @@ function MapHomeScreen() {
     setSelectLocation(nativeEvent.coordinate);
   };
 
-  const handlePressuserLocation = () => {
+  const handlePressAddPost = () => {
+    if (!selectLocation) {
+      return Alert.alert(
+        alerts.NOT_SELECTED_LOCATION.TITLE,
+        alerts.NOT_SELECTED_LOCATION.DESCRIPTION,
+      );
+    }
+
+    navigation.navigate(mapNavigations.ADD_POST, {
+      location: selectLocation,
+    });
+  };
+
+  const handlePressUserLocation = () => {
     if (isUserLocationError) {
       // 에러 표기
       return;
@@ -104,7 +116,10 @@ function MapHomeScreen() {
         <Ionicons name="menu" color={colors.WHITE} size={25} />
       </Pressable>
       <View style={styles.buttonList}>
-        <Pressable style={styles.mapButton} onPress={handlePressuserLocation}>
+        <Pressable style={styles.mapButton} onPress={handlePressAddPost}>
+          <MeterialIcons name={'add'} color={colors.WHITE} size={25} />
+        </Pressable>
+        <Pressable style={styles.mapButton} onPress={handlePressUserLocation}>
           <MeterialIcons name={'my-location'} color={colors.WHITE} size={25} />
         </Pressable>
       </View>
