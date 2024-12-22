@@ -19,6 +19,7 @@ import HeaderButton from '@/shared/components/HeaderButton.tsx';
 import {useMutateCreatePost} from '@/shared/hooks/queries/useMutateCreatePost.ts';
 import {MarkerColor} from '@/types/domain.ts';
 import useGetAddress from '@/shared/hooks/useGetAddress.ts';
+import MarkerSelector from '@/screens/map/components/MarkerSelector.tsx';
 
 type AddPostScreenProps = StackScreenProps<
   MapStackParamList,
@@ -37,6 +38,10 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
   const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
   const [score, setScore] = useState(5);
   const address = useGetAddress(location);
+
+  const handleSelectMarker = (color: MarkerColor) => {
+    setMarkerColor(color);
+  };
 
   const handleSubmit = () => {
     const body = {
@@ -93,6 +98,10 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             secureTextEntry
             returnKeyType="join"
             {...addPost.getTextInputProps('description')}
+          />
+          <MarkerSelector
+            markerColor={markerColor}
+            onSelectMarker={handleSelectMarker}
           />
         </View>
       </ScrollView>
