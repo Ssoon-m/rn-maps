@@ -6,6 +6,7 @@ export const colors = {
   YELLOW_400: '#FFE594',
   //blue
   BLUE_400: '#B4E0FF',
+  BLUE_500: '#0D8AFF',
   //green
   GREEN_400: '#CCE6BA',
   // gray
