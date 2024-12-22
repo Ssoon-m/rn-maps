@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -16,6 +16,9 @@ import Button from '@/shared/components/Button.tsx';
 import {useForm} from '@/shared/hooks/useForm.ts';
 import {validateAddPost} from '@/shared/utils';
 import HeaderButton from '@/shared/components/HeaderButton.tsx';
+import {useMutateCreatePost} from '@/shared/hooks/queries/useMutateCreatePost.ts';
+import {MarkerColor} from '@/types/domain.ts';
+import useGetAddress from '@/shared/hooks/useGetAddress.ts';
 
 type AddPostScreenProps = StackScreenProps<
   MapStackParamList,
@@ -25,13 +28,30 @@ type AddPostScreenProps = StackScreenProps<
 function AddPostScreen({route, navigation}: AddPostScreenProps) {
   const {location} = route.params;
   const descriptionRef = useRef<TextInput | null>(null);
+  const createPost = useMutateCreatePost();
   const addPost = useForm({
     initialValue: {title: '', description: ''},
     validate: validateAddPost,
   });
 
+  const [markerColor, setMarkerColor] = useState<MarkerColor>('RED');
+  const [score, setScore] = useState(5);
+  const address = useGetAddress(location);
+
   const handleSubmit = () => {
-    console.log('submit');
+    const body = {
+      date: new Date(),
+      title: addPost.values.title,
+      description: addPost.values.description,
+      color: markerColor,
+      score,
+      imageUris: [],
+    };
+    console.log(body);
+    createPost.mutate(
+      {address, ...location, ...body},
+      {onSuccess: () => navigation.goBack(), onError: err => console.log(err)},
+    );
   };
 
   useEffect(() => {
@@ -47,7 +67,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
       <ScrollView style={styles.contentContainer}>
         <View style={styles.inputContainer}>
           <InputField
-            value={''}
+            value={address}
             disabled
             icon={
               <Octicons name={'location'} size={16} color={colors.GRAY_500} />
