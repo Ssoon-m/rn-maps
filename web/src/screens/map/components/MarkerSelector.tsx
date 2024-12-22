@@ -1,3 +1,4 @@
+import React from 'react';
 import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import CustomMarker from '@/screens/map/components/CustomMarker.tsx';
 import {colors} from '@/constants';
@@ -6,10 +7,15 @@ import {MarkerColor} from '@/types/domain.ts';
 interface MarkerSelectorProps {
   markerColor: MarkerColor;
   onSelectMarker: (color: MarkerColor) => void;
+  score?: number;
 }
 
 const markerColors = ['RED', 'YELLOW', 'GREEN', 'BLUE', 'PURPLE'] as const;
-function MarkerSelector({markerColor, onSelectMarker}: MarkerSelectorProps) {
+function MarkerSelector({
+  markerColor,
+  onSelectMarker,
+  score = 5,
+}: MarkerSelectorProps) {
   const onSelectMarkerColor = (color: MarkerColor) => {
     onSelectMarker(color);
   };
@@ -27,7 +33,7 @@ function MarkerSelector({markerColor, onSelectMarker}: MarkerSelectorProps) {
                   markerColor === color && styles.pressedMarker,
                 ]}
                 onPress={() => onSelectMarkerColor(color)}>
-                <CustomMarker color={color} />
+                <CustomMarker color={color} score={score} />
               </Pressable>
             );
           })}

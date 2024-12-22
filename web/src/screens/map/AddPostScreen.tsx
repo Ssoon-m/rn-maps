@@ -3,7 +3,6 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from 'react-native';
@@ -20,6 +19,7 @@ import {useMutateCreatePost} from '@/shared/hooks/queries/useMutateCreatePost.ts
 import {MarkerColor} from '@/types/domain.ts';
 import useGetAddress from '@/shared/hooks/useGetAddress.ts';
 import MarkerSelector from '@/screens/map/components/MarkerSelector.tsx';
+import ScoreInput from '@/screens/map/components/ScoreInput.tsx';
 
 type AddPostScreenProps = StackScreenProps<
   MapStackParamList,
@@ -57,6 +57,10 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
       {address, ...location, ...body},
       {onSuccess: () => navigation.goBack(), onError: err => console.log(err)},
     );
+  };
+
+  const handleChangeScore = (value: number) => {
+    setScore(value);
   };
 
   useEffect(() => {
@@ -100,9 +104,11 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             {...addPost.getTextInputProps('description')}
           />
           <MarkerSelector
+            score={score}
             markerColor={markerColor}
             onSelectMarker={handleSelectMarker}
           />
+          <ScoreInput onChangeScore={handleChangeScore} score={score} />
         </View>
       </ScrollView>
     </SafeAreaView>
