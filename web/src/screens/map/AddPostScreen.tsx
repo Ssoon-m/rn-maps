@@ -23,6 +23,7 @@ import ScoreInput from '@/screens/map/components/ScoreInput.tsx';
 import DatePickerOption from '@/screens/map/components/DatePickerOption.tsx';
 import {getDateWithSeparator} from '@/shared/utils/date.ts';
 import {useModal} from '@/shared/hooks/useModal.ts';
+import ImageInput from '@/screens/map/components/ImageInput.tsx';
 
 type AddPostScreenProps = StackScreenProps<
   MapStackParamList,
@@ -128,6 +129,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             onSelectMarker={handleSelectMarker}
           />
           <ScoreInput onChangeScore={handleChangeScore} score={score} />
+          <ImageInput onChange={() => {}} />
           <DatePickerOption
             isVisible={dateOption.isVisible}
             date={date}

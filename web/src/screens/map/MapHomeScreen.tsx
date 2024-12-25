@@ -41,15 +41,6 @@ function MapHomeScreen() {
     logoutMutation.mutate(null);
   };
 
-  useEffect(() => {
-    mapRef.current?.animateToRegion({
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-      longitudeDelta: 0.0421,
-      latitudeDelta: 0.0922,
-    });
-  }, [mapRef.current]);
-
   const handleLongPressMapView = ({nativeEvent}: LongPressEvent) => {
     setSelectLocation(nativeEvent.coordinate);
   };
@@ -90,7 +81,12 @@ function MapHomeScreen() {
         followsUserLocation={true}
         showsMyLocationButton={false}
         customMapStyle={mapStyle}
-        onLongPress={handleLongPressMapView}>
+        onLongPress={handleLongPressMapView}
+        region={{
+          ...userLocation,
+          longitudeDelta: 0.0421,
+          latitudeDelta: 0.0922,
+        }}>
         {markers.map(marker => (
           <CustomMarker
             key={marker.id}
