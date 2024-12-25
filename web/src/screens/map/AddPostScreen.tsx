@@ -68,6 +68,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
       score,
       imageUris: imagePicker.imageUris,
     };
+
     createPost.mutate(
       {address, ...location, ...body},
       {onSuccess: () => navigation.goBack(), onError: err => console.log(err)},
@@ -84,7 +85,7 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
         <HeaderButton labelText="등록" onPress={handleSubmit} />
       ),
     });
-  }, []);
+  });
 
   const handleChangeDate = (date: Date) => {
     setDate(date);
@@ -128,7 +129,6 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             error={addPost.errors.description}
             touched={addPost.touched.description}
             multiline={true}
-            secureTextEntry
             returnKeyType="join"
             {...addPost.getTextInputProps('description')}
           />

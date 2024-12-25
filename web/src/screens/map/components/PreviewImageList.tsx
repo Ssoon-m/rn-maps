@@ -25,9 +25,8 @@ function PreviewImageList({
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <View style={styles.container}>
         {imageUris.map(({uri, id}, index) => (
-          <Pressable style={styles.imageContainer}>
+          <Pressable style={styles.imageContainer} key={`${id}_${index}`}>
             <Image
-              key={id}
               resizeMode={'cover'}
               source={{
                 uri: `${
