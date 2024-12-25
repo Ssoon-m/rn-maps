@@ -1,5 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  Image,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -24,6 +26,9 @@ import DatePickerOption from '@/screens/map/components/DatePickerOption.tsx';
 import {getDateWithSeparator} from '@/shared/utils/date.ts';
 import {useModal} from '@/shared/hooks/useModal.ts';
 import ImageInput from '@/screens/map/components/ImageInput.tsx';
+import usePermissions from '@/shared/hooks/usePermissions.ts';
+import useImagePicker from '@/shared/hooks/useImagePicker.ts';
+import PreviewImageList from '@/screens/map/components/PreviewImageList.tsx';
 
 type AddPostScreenProps = StackScreenProps<
   MapStackParamList,
@@ -45,6 +50,10 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
   const [isPicked, setIsPicked] = useState<boolean>(false);
   const address = useGetAddress(location);
   const dateOption = useModal();
+  usePermissions('PHOTO');
+  const imagePicker = useImagePicker({
+    initialImages: [],
+  });
 
   const handleSelectMarker = (color: MarkerColor) => {
     setMarkerColor(color);
@@ -129,7 +138,14 @@ function AddPostScreen({route, navigation}: AddPostScreenProps) {
             onSelectMarker={handleSelectMarker}
           />
           <ScoreInput onChangeScore={handleChangeScore} score={score} />
-          <ImageInput onChange={() => {}} />
+          <View style={styles.imageViewer}>
+            <ImageInput onChange={imagePicker.handleChange} />
+            <PreviewImageList
+              imageUris={imagePicker.imageUris}
+              onDelete={imagePicker.deleteImageUri}
+              onChangeOrder={imagePicker.changeOrder}
+            />
+          </View>
           <DatePickerOption
             isVisible={dateOption.isVisible}
             date={date}
@@ -154,6 +170,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     gap: 20,
     marginBottom: 20,
+  },
+  imageViewer: {
+    flexDirection: 'row',
   },
 });
 

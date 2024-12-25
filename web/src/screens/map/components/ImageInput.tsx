@@ -13,7 +13,8 @@ const ImageInput = ({onChange}: ImageInputProps) => {
       style={({pressed}) => [
         pressed && styles.imageInputPressed,
         styles.imageInput,
-      ]}>
+      ]}
+      onPress={onChange}>
       <Ionicons name="camera-outline" size={20} color={colors.GRAY_500} />
       <Text style={styles.inputText}>사진추가</Text>
     </Pressable>
