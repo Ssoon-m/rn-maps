@@ -1,8 +1,9 @@
 import {httpClient} from '@/shared/lib/http-client.ts';
 import {ImageUri, Post} from '@/types/domain.ts';
 
-type ResponsePost = Post & {image: ImageUri[]};
+type ResponsePost = Post & {images: ImageUri[]};
 type RequestCreatePost = Omit<Post, 'id'> & {imageUris: ImageUri[]};
+export type ResponseSinglePost = ResponsePost & {isFavorite: boolean};
 
 export class PostService {
   static async createPost(body: RequestCreatePost) {
@@ -11,6 +12,11 @@ export class PostService {
   static async uploadImage(body: FormData) {
     return httpClient
       .post('/images', body, {headers: {'Content-Type': 'multipart/form-data'}})
+      .then(res => res.data);
+  }
+  static async getPost(id: number) {
+    return httpClient
+      .get<ResponseSinglePost>(`/posts/${id}`)
       .then(res => res.data);
   }
 }

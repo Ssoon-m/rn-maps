@@ -21,6 +21,8 @@ import MeterialIcons from '@react-native-vector-icons/material-icons';
 import {mapStyle} from '@/style/mapStyle.ts';
 import CustomMarker from '@/screens/map/components/CustomMarker.tsx';
 import useGetMarkers from '@/shared/hooks/queries/useGetMarkers.ts';
+import MarkerModal from '@/screens/map/components/MarkerModal.tsx';
+import {useModal} from '@/shared/hooks/useModal.ts';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -33,6 +35,22 @@ function MapHomeScreen() {
   const navigation = useNavigation<Navigation>();
   const {userLocation, isUserLocationError} = useUserLocation();
   const [selectLocation, setSelectLocation] = useState<LatLng>();
+  const [markerId, setMarkerId] = useState<number | null>(null);
+  const markerModal = useModal();
+
+  const moveMapView = (coordinate: LatLng) => {
+    mapRef.current?.animateToRegion({
+      ...coordinate,
+      longitudeDelta: 0.0421,
+      latitudeDelta: 0.0922,
+    });
+    markerModal.show();
+  };
+
+  const handlePressMarker = (id: number, coordinate: LatLng) => {
+    moveMapView(coordinate);
+    setMarkerId(id);
+  };
 
   const mapRef = useRef<MapView | null>(null);
   const {data: markers = []} = useGetMarkers();
@@ -63,12 +81,7 @@ function MapHomeScreen() {
       // 에러 표기
       return;
     }
-    mapRef.current?.animateToRegion({
-      latitude: userLocation.latitude,
-      longitude: userLocation.longitude,
-      longitudeDelta: 0.0421,
-      latitudeDelta: 0.0922,
-    });
+    moveMapView(userLocation);
   };
 
   return (
@@ -96,6 +109,12 @@ function MapHomeScreen() {
               longitude: marker.longitude,
             }}
             color={marker.color}
+            onPress={() =>
+              handlePressMarker(marker.id, {
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+              })
+            }
           />
         ))}
         {selectLocation && (
@@ -117,6 +136,11 @@ function MapHomeScreen() {
           <MeterialIcons name={'my-location'} color={colors.WHITE} size={25} />
         </Pressable>
       </View>
+      <MarkerModal
+        markerId={markerId}
+        isVisible={markerModal.isVisible}
+        hide={markerModal.hide}
+      />
     </>
   );
 }
