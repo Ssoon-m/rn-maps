@@ -1,7 +1,7 @@
 import {httpClient} from '@/shared/lib/http-client.ts';
 import {ImageUri, Post} from '@/types/domain.ts';
 
-type ResponsePost = Post & {images: ImageUri[]};
+export type ResponsePost = Post & {images: ImageUri[]};
 type RequestCreatePost = Omit<Post, 'id'> & {imageUris: ImageUri[]};
 export type ResponseSinglePost = ResponsePost & {isFavorite: boolean};
 
@@ -17,6 +17,15 @@ export class PostService {
   static async getPost(id: number) {
     return httpClient
       .get<ResponseSinglePost>(`/posts/${id}`)
+      .then(res => res.data);
+  }
+  static async getPosts(page: number = 1) {
+    return httpClient
+      .get<ResponsePost[]>('/posts/my', {
+        params: {
+          page,
+        },
+      })
       .then(res => res.data);
   }
 }
