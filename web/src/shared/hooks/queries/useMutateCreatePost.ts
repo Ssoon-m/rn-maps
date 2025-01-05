@@ -9,6 +9,9 @@ function useMutateCreatePost(mutationOptions?: UseMutationCustomOptions) {
     mutationFn: PostService.createPost,
     onSuccess: () => {
       queryClient.invalidateQueries({
+        queryKey: [queryKeys.POST, queryKeys.GET_POST],
+      });
+      queryClient.invalidateQueries({
         queryKey: [queryKeys.MARKER, queryKeys.GET_MARKERS],
       });
     },

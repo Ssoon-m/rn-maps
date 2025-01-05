@@ -23,6 +23,7 @@ import CustomMarker from '@/screens/map/components/CustomMarker.tsx';
 import useGetMarkers from '@/shared/hooks/queries/useGetMarkers.ts';
 import MarkerModal from '@/screens/map/components/MarkerModal.tsx';
 import {useModal} from '@/shared/hooks/useModal.ts';
+import useMoveMapView from '@/screens/map/hooks/useMoveMapView.ts';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -36,24 +37,15 @@ function MapHomeScreen() {
   const {userLocation, isUserLocationError} = useUserLocation();
   const [selectLocation, setSelectLocation] = useState<LatLng>();
   const [markerId, setMarkerId] = useState<number | null>(null);
+  const {mapRef, moveMapView, handleChangeDelta} = useMoveMapView();
   const markerModal = useModal();
-
-  const moveMapView = (coordinate: LatLng) => {
-    mapRef.current?.animateToRegion({
-      ...coordinate,
-      longitudeDelta: 0.0421,
-      latitudeDelta: 0.0922,
-    });
-    markerModal.show();
-  };
+  const {data: markers = []} = useGetMarkers();
 
   const handlePressMarker = (id: number, coordinate: LatLng) => {
     moveMapView(coordinate);
     setMarkerId(id);
+    markerModal.show();
   };
-
-  const mapRef = useRef<MapView | null>(null);
-  const {data: markers = []} = useGetMarkers();
 
   const handleLogout = () => {
     logoutMutation.mutate(null);
@@ -95,6 +87,7 @@ function MapHomeScreen() {
         showsMyLocationButton={false}
         customMapStyle={mapStyle}
         onLongPress={handleLongPressMapView}
+        onRegionChangeComplete={handleChangeDelta} // 위치 OR 확대 정보 변경시
         region={{
           ...userLocation,
           longitudeDelta: 0.0421,

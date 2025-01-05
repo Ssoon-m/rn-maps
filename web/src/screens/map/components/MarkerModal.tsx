@@ -3,7 +3,6 @@ import {
   Dimensions,
   Image,
   Modal,
-  Platform,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -11,11 +10,21 @@ import {
   View,
 } from 'react-native';
 import useGetPost from '@/shared/hooks/queries/useGetPost.ts';
-import {colors} from '@/constants';
+import {
+  colors,
+  feedNavigations,
+  mainNavigations,
+  SERVICE_URL,
+} from '@/constants';
 import Octicons from '@react-native-vector-icons/octicons';
 import CustomMarker from '@/screens/map/components/CustomMarker.tsx';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import {getDateWithSeparator} from '@/shared/utils/date.ts';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator.tsx';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {MainDrawerParamList} from '@/navigations/drawer/MainDrawerNavigator.tsx';
 
 interface MarkerModalProps {
   markerId: number | null;
@@ -23,15 +32,46 @@ interface MarkerModalProps {
   hide: () => void;
 }
 
+type Navigation = CompositeNavigationProp<
+  DrawerNavigationProp<MainDrawerParamList>,
+  StackNavigationProp<FeedStackParamList>
+>;
+
 const MarkerModal = ({markerId, isVisible, hide}: MarkerModalProps) => {
   const {data: post, isPending, isError} = useGetPost(markerId);
+  const navigation = useNavigation<Navigation>();
+
   if (isPending || isError) {
     return <></>;
   }
+
+  /**
+   * NOTE:
+   * MainDrawer navigation에서
+   * MapStackNavigator에 있는 MapHomeScreen에서
+   * 다른 Stack navigator에 있는 곳으로 이동하는 것이므로
+   * 아래와 같이 작성을 해줘야 한다.
+   */
+  const handlePressModal = () => {
+    navigation.navigate(mainNavigations.FEED, {
+      screen: feedNavigations.FEED_DETAIL,
+      params: {
+        id: post.id,
+      },
+      /**
+       * false일 경우
+       * MapHomeScreen 스택이 초기 스택이 안되게 도와줌
+       * 피드 상세로 이동하고 뒤로가기 시에
+       * 피드 리스트로 이동이 된다.
+       */
+      initial: false,
+    });
+  };
+
   return (
     <Modal visible={isVisible} transparent={true} animationType="slide">
       <SafeAreaView style={styles.optionBackground} onTouchEnd={hide}>
-        <Pressable style={styles.cardContainer} onPress={() => {}}>
+        <Pressable style={styles.cardContainer} onPress={handlePressModal}>
           <View style={styles.cardInner}>
             <View style={styles.cardAlign}>
               {post.images.length > 0 && (
@@ -39,11 +79,7 @@ const MarkerModal = ({markerId, isVisible, hide}: MarkerModalProps) => {
                   <Image
                     style={styles.image}
                     source={{
-                      uri: `${
-                        Platform.OS === 'ios'
-                          ? 'http://localhost:3030'
-                          : 'http://10.0.2.2:3030'
-                      }/${post.images[0].uri}`,
+                      uri: `${SERVICE_URL}/${post.images[0].uri}`,
                     }}
                     resizeMode="cover"
                   />
