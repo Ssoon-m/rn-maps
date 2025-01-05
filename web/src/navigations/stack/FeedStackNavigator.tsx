@@ -11,6 +11,7 @@ import {colors} from '@/constants';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {MainDrawerParamList} from '@/navigations/drawer/MainDrawerNavigator.tsx';
+import FeedDetailScreen from '@/screens/feed/FeedDetailScreen.tsx';
 
 // main drawer와 feed stack이 함께 사용되는 스크린이여서 Composite로 타입 생성
 type FeedHomeHeaderLeftProps = CompositeNavigationProp<
@@ -20,7 +21,7 @@ type FeedHomeHeaderLeftProps = CompositeNavigationProp<
 
 export type FeedStackParamList = {
   [feedNavigations.FEED_HOME]: undefined;
-  [feedNavigations.FEED_DETAIL]: undefined;
+  [feedNavigations.FEED_DETAIL]: {id: number};
 };
 
 const Stack = createStackNavigator<FeedStackParamList>();
@@ -53,6 +54,17 @@ function FeedStackNavigator() {
               onPress={() => navigation.openDrawer()}
             />
           ),
+        }}
+      />
+      <Stack.Screen
+        name={feedNavigations.FEED_DETAIL}
+        component={FeedDetailScreen}
+        options={{
+          headerShown: false,
+          headerTitle: '',
+          cardStyle: {
+            backgroundColor: colors.GRAY_100,
+          },
         }}
       />
     </Stack.Navigator>

@@ -15,11 +15,13 @@ interface PreviewImageListProps {
   imageUris: ImageUri[];
   onDelete?: (uri: string) => void;
   onChangeOrder?: (fromIndex: number, toIndex: number) => void;
+  showOption?: boolean;
 }
 function PreviewImageList({
   imageUris,
   onDelete,
   onChangeOrder,
+  showOption = false,
 }: PreviewImageListProps) {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -37,32 +39,36 @@ function PreviewImageList({
               }}
               style={styles.image}
             />
-            <Pressable
-              style={[styles.imageButton, styles.deleteButton]}
-              onPress={() => onDelete?.(uri)}>
-              <Iconicons name="close" size={16} color={colors.WHITE} />
-            </Pressable>
-            {index > 0 && (
-              <Pressable
-                style={[styles.imageButton, styles.moveLeftButton]}
-                onPress={() => onChangeOrder?.(index, index - 1)}>
-                <Iconicons
-                  name="arrow-back-outline"
-                  size={16}
-                  color={colors.WHITE}
-                />
-              </Pressable>
-            )}
-            {index < imageUris.length - 1 && (
-              <Pressable
-                style={[styles.imageButton, styles.moveRightButton]}
-                onPress={() => onChangeOrder?.(index, index + 1)}>
-                <Iconicons
-                  name="arrow-forward-outline"
-                  size={16}
-                  color={colors.WHITE}
-                />
-              </Pressable>
+            {showOption && (
+              <>
+                <Pressable
+                  style={[styles.imageButton, styles.deleteButton]}
+                  onPress={() => onDelete?.(uri)}>
+                  <Iconicons name="close" size={16} color={colors.WHITE} />
+                </Pressable>
+                {index > 0 && (
+                  <Pressable
+                    style={[styles.imageButton, styles.moveLeftButton]}
+                    onPress={() => onChangeOrder?.(index, index - 1)}>
+                    <Iconicons
+                      name="arrow-back-outline"
+                      size={16}
+                      color={colors.WHITE}
+                    />
+                  </Pressable>
+                )}
+                {index < imageUris.length - 1 && (
+                  <Pressable
+                    style={[styles.imageButton, styles.moveRightButton]}
+                    onPress={() => onChangeOrder?.(index, index + 1)}>
+                    <Iconicons
+                      name="arrow-forward-outline"
+                      size={16}
+                      color={colors.WHITE}
+                    />
+                  </Pressable>
+                )}
+              </>
             )}
           </Pressable>
         ))}

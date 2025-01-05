@@ -1,8 +1,12 @@
-const getDateWithSeparator = (dateString: Date | string, separator: string) => {
+const getDateDetails = (dateString: Date | string) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
+  return {year, month, day};
+};
+const getDateWithSeparator = (dateString: Date | string, separator: string) => {
+  const {year, month, day} = getDateDetails(dateString);
   return [
     year,
     String(month).padStart(2, '0'),
@@ -10,4 +14,9 @@ const getDateWithSeparator = (dateString: Date | string, separator: string) => {
   ].join(separator);
 };
 
-export {getDateWithSeparator};
+const getDateLocaleFormat = (dateString: Date | string) => {
+  const {year, month, day} = getDateDetails(dateString);
+  return `${year}년 ${month}월 ${day}일`;
+};
+
+export {getDateWithSeparator, getDateLocaleFormat};
