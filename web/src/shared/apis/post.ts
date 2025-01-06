@@ -28,4 +28,7 @@ export class PostService {
       })
       .then(res => res.data);
   }
+  static async deletePost(id: number) {
+    return httpClient.delete(`/posts/${id}`).then(res => res.data);
+  }
 }

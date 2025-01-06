@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Dimensions,
   Image,
@@ -32,6 +32,7 @@ import {DrawerScreenProps} from '@react-navigation/drawer';
 import useLocationStore from '@/store/useLocationStore.ts';
 import {useModal} from '@/shared/hooks/useModal.ts';
 import FeedDetailOption from '@/screens/feed/components/FeedDetailOption.tsx';
+import useDetailPostStore from '@/store/useDetailPostStore.ts';
 
 type FeedDetailScreenProps = CompositeScreenProps<
   StackScreenProps<FeedStackParamList, typeof feedNavigations.FEED_DETAIL>,
@@ -44,6 +45,11 @@ const FeedDetailScreen = ({route, navigation}: FeedDetailScreenProps) => {
   const insets = useSafeAreaInsets();
   const {setMoveLocation} = useLocationStore();
   const detailOption = useModal();
+  const {setDetailPost} = useDetailPostStore();
+
+  useEffect(() => {
+    post && setDetailPost(post);
+  }, [post]);
 
   if (isPending || isError) return <></>;
 
@@ -54,6 +60,7 @@ const FeedDetailScreen = ({route, navigation}: FeedDetailScreenProps) => {
       screen: mapNavigations.MAP_HOME,
     });
   };
+
   return (
     <>
       <ScrollView
