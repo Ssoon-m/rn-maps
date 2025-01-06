@@ -14,6 +14,7 @@ import {MainDrawerParamList} from '@/navigations/drawer/MainDrawerNavigator.tsx'
 import FeedDetailScreen from '@/screens/feed/FeedDetailScreen.tsx';
 import {LatLng} from 'react-native-maps';
 import EditPostScreen from '@/screens/feed/EditPostScreen.tsx';
+import ImageZoomScreen from '@/screens/feed/components/ImageZoomScreen.tsx';
 
 // main drawer와 feed stack이 함께 사용되는 스크린이여서 Composite로 타입 생성
 type FeedHomeHeaderLeftProps = CompositeNavigationProp<
@@ -25,6 +26,7 @@ export type FeedStackParamList = {
   [feedNavigations.FEED_HOME]: undefined;
   [feedNavigations.FEED_DETAIL]: {id: number};
   [feedNavigations.EDIT_POST]: {location: LatLng};
+  [feedNavigations.IMAGE_ZOOM]: {index: number};
 };
 
 const Stack = createStackNavigator<FeedStackParamList>();
@@ -75,6 +77,14 @@ function FeedStackNavigator() {
         component={EditPostScreen}
         options={{
           headerTitle: '장소 수정',
+        }}
+      />
+      <Stack.Screen
+        name={feedNavigations.IMAGE_ZOOM}
+        component={ImageZoomScreen}
+        options={{
+          headerTitle: ' ',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

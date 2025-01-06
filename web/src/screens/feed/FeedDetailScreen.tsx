@@ -143,9 +143,9 @@ const FeedDetailScreen = ({route, navigation}: FeedDetailScreenProps) => {
           </View>
           <Text style={styles.descriptionText}>{post.description}</Text>
         </View>
-        {post.images.length && (
+        {post.images.length > 0 && (
           <View style={styles.imageContentsContainer}>
-            <PreviewImageList imageUris={post.images} />
+            <PreviewImageList imageUris={post.images} zoomEnabled={true} />
           </View>
         )}
       </ScrollView>
