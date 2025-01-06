@@ -4,6 +4,7 @@ export const colors = {
   PURPLE_400: '#C4C4E7',
   //yellow
   YELLOW_400: '#FFE594',
+  YELLOW_500: '#FACC15',
   //blue
   BLUE_400: '#B4E0FF',
   BLUE_500: '#0D8AFF',

@@ -43,4 +43,12 @@ export class PostService {
       .patch<ResponseSinglePost>(`/posts/${id}`, body)
       .then(res => res.data);
   }
+  static async updateFavoritePost(id: number) {
+    return httpClient.post<number>(`/favorites/${id}`).then(res => res.data);
+  }
+  static async getFavoritePosts(page: number = 1) {
+    return httpClient
+      .get<ResponsePost[]>(`/favorites/my`, {params: {page}})
+      .then(res => res.data);
+  }
 }
