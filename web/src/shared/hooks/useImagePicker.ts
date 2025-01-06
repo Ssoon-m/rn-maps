@@ -33,7 +33,6 @@ function useImagePicker({initialImages = []}: UseImagePickerProps) {
   };
 
   const handleChange = () => {
-    console.log('openPicker:');
     ImagePicker.openPicker({
       mediaType: 'photo',
       multiple: true,

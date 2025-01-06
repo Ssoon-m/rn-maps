@@ -5,6 +5,13 @@ export type ResponsePost = Post & {images: ImageUri[]};
 type RequestCreatePost = Omit<Post, 'id'> & {imageUris: ImageUri[]};
 export type ResponseSinglePost = ResponsePost & {isFavorite: boolean};
 
+type RequestUpdatePost = {
+  id: number;
+  body: Omit<Post, 'id' | 'longitude' | 'latitude' | 'address'> & {
+    imageUris: ImageUri[];
+  };
+};
+
 export class PostService {
   static async createPost(body: RequestCreatePost) {
     return httpClient.post<ResponsePost>('/posts', body).then(res => res.data);
@@ -30,5 +37,10 @@ export class PostService {
   }
   static async deletePost(id: number) {
     return httpClient.delete(`/posts/${id}`).then(res => res.data);
+  }
+  static async updatePost({id, body}: RequestUpdatePost) {
+    return httpClient
+      .patch<ResponseSinglePost>(`/posts/${id}`, body)
+      .then(res => res.data);
   }
 }
