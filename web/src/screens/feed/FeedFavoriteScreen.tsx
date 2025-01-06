@@ -1,10 +1,11 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import {colors} from '@/constants';
+import FeedFavoriteList from '@/screens/feed/components/FeedFavoriteList.tsx';
 
 function FeedFavoriteScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>즐겨찾기 스크린</Text>
+      <FeedFavoriteList />
     </SafeAreaView>
   );
 }

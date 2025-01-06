@@ -13,6 +13,7 @@ import useGetPost from '@/shared/hooks/queries/useGetPost.ts';
 import {
   colors,
   feedNavigations,
+  feedTabNavigations,
   mainNavigations,
   SERVICE_URL,
 } from '@/constants';
@@ -21,10 +22,10 @@ import CustomMarker from '@/screens/map/components/CustomMarker.tsx';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import {getDateWithSeparator} from '@/shared/utils/date.ts';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator.tsx';
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import {MainDrawerParamList} from '@/navigations/drawer/MainDrawerNavigator.tsx';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {FeedTabParamList} from '@/navigations/tab/FeedTabNavigator.tsx';
 
 interface MarkerModalProps {
   markerId: number | null;
@@ -34,7 +35,7 @@ interface MarkerModalProps {
 
 type Navigation = CompositeNavigationProp<
   DrawerNavigationProp<MainDrawerParamList>,
-  StackNavigationProp<FeedStackParamList>
+  BottomTabNavigationProp<FeedTabParamList>
 >;
 
 const MarkerModal = ({markerId, isVisible, hide}: MarkerModalProps) => {
@@ -54,18 +55,22 @@ const MarkerModal = ({markerId, isVisible, hide}: MarkerModalProps) => {
    */
   const handlePressModal = () => {
     navigation.navigate(mainNavigations.FEED, {
-      screen: feedNavigations.FEED_DETAIL,
+      screen: feedTabNavigations.FEED_HOME,
       params: {
-        id: post.id,
+        screen: feedNavigations.FEED_DETAIL,
+        params: {
+          id: post.id,
+        },
+        /**
+         * false일 경우
+         * MapHomeScreen 스택이 초기 스택이 안되게 도와줌
+         * 피드 상세로 이동하고 뒤로가기 시에
+         * 피드 리스트로 이동이 된다.
+         */
+        initial: false,
       },
-      /**
-       * false일 경우
-       * MapHomeScreen 스택이 초기 스택이 안되게 도와줌
-       * 피드 상세로 이동하고 뒤로가기 시에
-       * 피드 리스트로 이동이 된다.
-       */
-      initial: false,
     });
+    hide();
   };
 
   return (
