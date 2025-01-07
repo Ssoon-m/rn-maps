@@ -12,6 +12,8 @@ import CustomDrawerContent from '@/navigations/drawer/CustomDrawerContent.tsx';
 import FeedTabNavigator, {
   FeedTabParamList,
 } from '@/navigations/tab/FeedTabNavigator.tsx';
+import HeaderButton from '@/shared/components/HeaderButton.tsx';
+import Ionicons from '@react-native-vector-icons/ionicons';
 
 export type MainDrawerParamList = {
   [mainNavigations.HOME]: NavigatorScreenParams<MapStackParamList>;
@@ -79,7 +81,16 @@ const MainDrawerNavigator = () => {
       <Drawer.Screen
         name={mainNavigations.CALENDAR}
         component={CalendarHomeScreen}
-        options={{title: '캘린더'}}
+        options={({navigation}) => ({
+          title: '캘린더',
+          headerShown: true,
+          headerLeft: () => (
+            <HeaderButton
+              icon={<Ionicons name="menu" color={colors.BLACK} size={25} />}
+              onPress={() => (navigation as any).openDrawer()}
+            />
+          ),
+        })}
       />
     </Drawer.Navigator>
   );

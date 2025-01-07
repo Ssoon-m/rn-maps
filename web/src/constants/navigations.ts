@@ -24,6 +24,7 @@ const feedNavigations = {
 
 const feedTabNavigations = {
   FEED_HOME: 'FeedTabHome',
+  FEED_SEARCH: 'FeedSearch',
   FEED_FAVORITE: 'FeedFavorite',
 } as const;
 

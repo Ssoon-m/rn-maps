@@ -51,4 +51,14 @@ export class PostService {
       .get<ResponsePost[]>(`/favorites/my`, {params: {page}})
       .then(res => res.data);
   }
+  static async searchMyPosts(query: string, page: number = 1) {
+    return httpClient
+      .get<ResponsePost[]>(`/posts/my/search`, {
+        params: {
+          query,
+          page,
+        },
+      })
+      .then(res => res.data);
+  }
 }

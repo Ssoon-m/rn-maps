@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import HeaderButton from '@/shared/components/HeaderButton.tsx';
+import FeedSearchScreen from '@/screens/feed/FeedSearchScreen.tsx';
 
 export type FeedTabParamList = {
   [feedTabNavigations.FEED_HOME]: {
@@ -19,17 +20,26 @@ export type FeedTabParamList = {
     };
     initial: false;
   };
+  [feedTabNavigations.FEED_SEARCH]: undefined;
   [feedTabNavigations.FEED_FAVORITE]: undefined;
 };
 
 const Tab = createBottomTabNavigator<FeedTabParamList>();
 
 function TabBarIcons(route: RouteProp<FeedTabParamList>, focused: boolean) {
-  let iconName: 'reader' | 'reader-outline' | 'star' | 'star-outline' =
-    'reader';
+  let iconName:
+    | 'reader'
+    | 'reader-outline'
+    | 'star'
+    | 'star-outline'
+    | 'search'
+    | 'search-outline' = 'reader';
   switch (route.name) {
     case feedTabNavigations.FEED_HOME:
       iconName = focused ? 'reader' : 'reader-outline';
+      break;
+    case feedTabNavigations.FEED_SEARCH:
+      iconName = focused ? 'search' : 'search-outline';
       break;
     case feedTabNavigations.FEED_FAVORITE:
       iconName = focused ? 'star' : 'star-outline';
@@ -86,6 +96,14 @@ function FeedTabNavigator() {
             };
           })(route),
         })}
+      />
+      <Tab.Screen
+        name={feedTabNavigations.FEED_SEARCH}
+        component={FeedSearchScreen}
+        options={{
+          headerTitle: ' ',
+          headerShown: false,
+        }}
       />
       <Tab.Screen
         name={feedTabNavigations.FEED_FAVORITE}

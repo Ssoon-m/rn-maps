@@ -8,7 +8,8 @@ import {PostService, ResponsePost} from '@/shared/apis/post.ts';
 import {queryKeys} from '@/constants';
 import {ResponseError} from '@/types/common.ts';
 
-function useGetInfiniteFavoritePosts(
+function useInfiniteSearchMyPosts(
+  search: string,
   queryOptions?: UseInfiniteQueryOptions<
     ResponsePost[],
     ResponseError,
@@ -19,8 +20,13 @@ function useGetInfiniteFavoritePosts(
   >,
 ) {
   return useInfiniteQuery({
-    queryFn: ({pageParam}) => PostService.getFavoritePosts(pageParam),
-    queryKey: [queryKeys.POST, queryKeys.SEARCH, queryKeys.GET_SEARCH_POSTS],
+    queryFn: ({pageParam}) => PostService.searchMyPosts(search, pageParam),
+    queryKey: [
+      queryKeys.POST,
+      queryKeys.FAVORITE,
+      queryKeys.GET_FAVORITE_POSTS,
+      search,
+    ],
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       const lastPost = lastPage[lastPage.length - 1];
@@ -30,4 +36,4 @@ function useGetInfiniteFavoritePosts(
   });
 }
 
-export default useGetInfiniteFavoritePosts;
+export default useInfiniteSearchMyPosts;
