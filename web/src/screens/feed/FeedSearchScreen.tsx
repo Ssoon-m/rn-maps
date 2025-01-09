@@ -1,4 +1,4 @@
-import React, {createContext, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {colors} from '@/constants';
 import FeedSearchList from '@/screens/feed/components/FeedSearchList.tsx';
