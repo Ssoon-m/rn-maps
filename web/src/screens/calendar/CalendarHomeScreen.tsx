@@ -10,13 +10,22 @@ import {
 function CalendarHomeScreen() {
   const currentMonthYear = getMonthYearDetails(new Date());
   const [monthYear, setMonthYear] = useState(currentMonthYear);
+  const [selectedDate, setSelectedDate] = useState<number>(0);
+  const handlePressDate = (date: number) => {
+    setSelectedDate(date);
+  };
 
   const handleChangeMonth = (increment: number) => {
     setMonthYear(prev => getNewMonthYear(prev, increment));
   };
   return (
     <SafeAreaView style={styles.container}>
-      <Calendar monthYear={monthYear} onChangeMonth={handleChangeMonth} />
+      <Calendar
+        monthYear={monthYear}
+        onChangeMonth={handleChangeMonth}
+        selectedDate={selectedDate}
+        onPressDate={handlePressDate}
+      />
     </SafeAreaView>
   );
 }

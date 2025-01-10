@@ -1,16 +1,24 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import {colors} from '@/constants';
 import DayOfWeeks from '@/screens/calendar/components/DayOfWeeks.tsx';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
-import {MonthYear} from '@/screens/calendar/utils/date.ts';
+import {isSameAsCurrentDate, MonthYear} from '@/screens/calendar/utils/date.ts';
+import DateBox from '@/screens/calendar/components/DateBox.tsx';
 
 interface CalendarProps {
   monthYear: MonthYear;
   onChangeMonth: (increment: number) => void;
+  selectedDate: number;
+  onPressDate: (date: number) => void;
 }
-export default function Calendar({monthYear, onChangeMonth}: CalendarProps) {
-  const {month, year} = monthYear;
+export default function Calendar({
+  monthYear,
+  onChangeMonth,
+  selectedDate,
+  onPressDate,
+}: CalendarProps) {
+  const {month, year, lastDate, firstDayOfWeek} = monthYear;
   return (
     <>
       <View style={styles.headerContainer}>
@@ -34,6 +42,24 @@ export default function Calendar({monthYear, onChangeMonth}: CalendarProps) {
         </Pressable>
       </View>
       <DayOfWeeks />
+      <View style={styles.bodyContainer}>
+        <FlatList
+          data={Array.from({length: lastDate + firstDayOfWeek}, (_, i) => ({
+            id: i,
+            date: i - firstDayOfWeek + 1,
+          }))}
+          renderItem={({item}) => (
+            <DateBox
+              date={item.date}
+              isToday={isSameAsCurrentDate(year, month, item.date)}
+              selectedDate={selectedDate}
+              onPressDate={onPressDate}
+            />
+          )}
+          keyExtractor={item => String(item.id)}
+          numColumns={7}
+        />
+      </View>
     </>
   );
 }
@@ -58,5 +84,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '500',
     color: colors.BLACK,
+  },
+  bodyContainer: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.GRAY_300,
+    backgroundColor: colors.GRAY_100,
   },
 });
