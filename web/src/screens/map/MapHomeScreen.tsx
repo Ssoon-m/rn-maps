@@ -24,6 +24,7 @@ import useGetMarkers from '@/shared/hooks/queries/useGetMarkers.ts';
 import MarkerModal from '@/screens/map/components/MarkerModal.tsx';
 import {useModal} from '@/shared/hooks/useModal.ts';
 import useMoveMapView from '@/screens/map/hooks/useMoveMapView.ts';
+import Toast from 'react-native-toast-message';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -70,6 +71,11 @@ function MapHomeScreen() {
 
   const handlePressUserLocation = () => {
     if (isUserLocationError) {
+      Toast.show({
+        type: 'error',
+        text1: '위치 권한을 허용해주세요.',
+        position: 'bottom',
+      });
       // 에러 표기
       return;
     }

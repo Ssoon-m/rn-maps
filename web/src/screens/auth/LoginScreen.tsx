@@ -7,6 +7,7 @@ import Button from '../../shared/components/Button';
 import {useForm} from '../../shared/hooks/useForm';
 import {validateLogin} from '../../shared/utils';
 import useAuth from '../../shared/hooks/queries/useAuth';
+import Toast from 'react-native-toast-message';
 
 type LoginScreenProps = StackScreenProps<AuthStackParamList>;
 
@@ -18,7 +19,14 @@ function LoginScreen({}: LoginScreenProps) {
     validate: validateLogin,
   });
   const handleSubmit = () => {
-    loginMutation.mutate(login.values);
+    loginMutation.mutate(login.values, {
+      onError: error =>
+        Toast.show({
+          type: 'error',
+          text1: error.resposne?.data.message,
+          position: 'bottom',
+        }),
+    });
   };
 
   return (
