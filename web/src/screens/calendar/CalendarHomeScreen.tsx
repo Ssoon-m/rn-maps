@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {colors} from '@/constants';
 import Calendar from '@/screens/calendar/components/Calendar.tsx';
@@ -19,6 +19,15 @@ function CalendarHomeScreen() {
     isError,
   } = useGetCalendarPosts(monthYear.year, monthYear.month);
 
+  const moveToToday = () => {
+    setSelectedDate(new Date().getDay());
+    setMonthYear(getMonthYearDetails(new Date()));
+  };
+
+  useEffect(() => {
+    moveToToday();
+  }, []);
+
   if (isPending || isError) {
     return <></>;
   }
@@ -37,6 +46,7 @@ function CalendarHomeScreen() {
         onChangeMonth={handleChangeMonth}
         selectedDate={selectedDate}
         onPressDate={handlePressDate}
+        moveToToday={moveToToday}
       />
       <EventList posts={posts[selectedDate]} />
     </SafeAreaView>

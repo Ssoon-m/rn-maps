@@ -9,6 +9,9 @@ function useMutateDeletePost(mutationOptions?: UseMutationCustomOptions) {
     mutationFn: PostService.deletePost,
     onSuccess: () => {
       queryClient.invalidateQueries({
+        queryKey: [queryKeys.POST, queryKeys.GET_CALENDAR_POSTS],
+      });
+      queryClient.invalidateQueries({
         queryKey: [queryKeys.POST, queryKeys.GET_POST],
       });
       queryClient.invalidateQueries({

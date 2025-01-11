@@ -7,7 +7,15 @@ import {queryKeys} from '@/constants';
 function useMutateCreatePost(mutationOptions?: UseMutationCustomOptions) {
   return useMutation({
     mutationFn: PostService.createPost,
-    onSuccess: () => {
+    onSuccess: newPost => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          queryKeys.POST,
+          queryKeys.GET_CALENDAR_POSTS,
+          new Date(newPost.date).getFullYear(),
+          new Date(newPost.date).getMonth() + 1,
+        ],
+      });
       queryClient.invalidateQueries({
         queryKey: [queryKeys.POST, queryKeys.GET_POST],
       });
