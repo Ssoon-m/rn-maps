@@ -12,6 +12,14 @@ type RequestUpdatePost = {
   };
 };
 
+export type CalendarPost = {
+  id: number;
+  title: string;
+  address: string;
+};
+
+export type ResponseCalendarPost = Record<number, CalendarPost[]>;
+
 export class PostService {
   static async createPost(body: RequestCreatePost) {
     return httpClient.post<ResponsePost>('/posts', body).then(res => res.data);
@@ -59,6 +67,11 @@ export class PostService {
           page,
         },
       })
+      .then(res => res.data);
+  }
+  static async getCalendarPost(year: number, month: number) {
+    return httpClient
+      .get<ResponseCalendarPost>(`/posts`, {params: {year, month}})
       .then(res => res.data);
   }
 }

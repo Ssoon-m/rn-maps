@@ -6,11 +6,22 @@ import {
   getMonthYearDetails,
   getNewMonthYear,
 } from '@/screens/calendar/utils/date.ts';
+import {useGetCalendarPosts} from '@/shared/hooks/queries/useGetCalendarPosts.ts';
+import EventList from '@/screens/calendar/components/EventList.tsx';
 
 function CalendarHomeScreen() {
   const currentMonthYear = getMonthYearDetails(new Date());
   const [monthYear, setMonthYear] = useState(currentMonthYear);
   const [selectedDate, setSelectedDate] = useState<number>(0);
+  const {
+    data: posts,
+    isPending,
+    isError,
+  } = useGetCalendarPosts(monthYear.year, monthYear.month);
+
+  if (isPending || isError) {
+    return <></>;
+  }
   const handlePressDate = (date: number) => {
     setSelectedDate(date);
   };
@@ -22,10 +33,12 @@ function CalendarHomeScreen() {
     <SafeAreaView style={styles.container}>
       <Calendar
         monthYear={monthYear}
+        schedules={posts}
         onChangeMonth={handleChangeMonth}
         selectedDate={selectedDate}
         onPressDate={handlePressDate}
       />
+      <EventList posts={posts[selectedDate]} />
     </SafeAreaView>
   );
 }
