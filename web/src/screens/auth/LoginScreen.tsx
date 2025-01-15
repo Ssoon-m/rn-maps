@@ -23,7 +23,7 @@ function LoginScreen({}: LoginScreenProps) {
       onError: error =>
         Toast.show({
           type: 'error',
-          text1: error.resposne?.data.message,
+          text1: error.message,
           position: 'bottom',
         }),
     });

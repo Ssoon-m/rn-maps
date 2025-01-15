@@ -42,12 +42,12 @@ const toastConfig = {
       }}
     />
   ),
-  tomatoToast: ({text1, props}) => (
-    <View style={{height: 60, width: '100%', backgroundColor: 'tomato'}}>
-      <Text>{text1}</Text>
-      <Text>{props.uuid}</Text>
-    </View>
-  ),
+  // tomatoToast: ({text1, props}: {text1: string; props: any}) => (
+  //   <View style={{height: 60, width: '100%', backgroundColor: 'tomato'}}>
+  //     <Text>{text1}</Text>
+  //     <Text>{props.uuid}</Text>
+  //   </View>
+  // ),
 };
 
 function App(): React.JSX.Element {
