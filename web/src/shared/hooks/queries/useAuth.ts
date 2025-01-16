@@ -17,7 +17,7 @@ const useSignup = (options?: UseMutationCustomOptions) => {
   });
 };
 
-const useLogin = (options?: UseMutationCustomOptions) => {
+const useEmailLogin = (options?: UseMutationCustomOptions) => {
   return useMutation({
     mutationFn: AuthService.postLogin,
     onSuccess: ({accessToken, refreshToken}) => {
@@ -26,6 +26,25 @@ const useLogin = (options?: UseMutationCustomOptions) => {
     },
     onSettled: () => {
       // refetch
+      queryClient.refetchQueries({
+        queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
+      });
+    },
+    ...options,
+  });
+};
+
+const useKaKaoLogin = (options?: UseMutationCustomOptions) => {
+  return useMutation({
+    mutationFn: AuthService.kakaoLogin,
+    onSuccess: ({accessToken, refreshToken}) => {
+      setEncryptStorage(storageKeys.REFRESH_TOKEN, refreshToken);
+      setHeader('Authorization', `Bearer ${accessToken}`);
+    },
+    onSettled: () => {
       queryClient.refetchQueries({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
       });
@@ -93,12 +112,14 @@ const useAuth = () => {
     enabled: refreshTokenQuery.isSuccess,
   });
   const isLogin = getProfileQuery.isSuccess;
-  const loginMutation = useLogin();
+  const loginMutation = useEmailLogin();
+  const kakaoLoginMutation = useKaKaoLogin();
   const logoutMutation = useLogout();
 
   return {
     signupMutation,
     loginMutation,
+    kakaoLoginMutation,
     isLogin,
     getProfileQuery,
     logoutMutation,

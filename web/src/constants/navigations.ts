@@ -7,6 +7,7 @@ const mainNavigations = {
 const authNavigations = {
   AUTH_HOME: 'AuthHome',
   LOGIN: 'Login',
+  KAKAO_LOGIN: 'KakaoLogin',
   SIGNUP: 'Signup',
 } as const;
 

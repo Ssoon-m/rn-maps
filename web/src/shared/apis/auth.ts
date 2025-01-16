@@ -40,6 +40,9 @@ export class AuthService {
       .then(res => res.data);
   }
   static async logout() {
-    await httpClient.post('/auth/logout').then(res => res.data);
+    return httpClient.post('/auth/logout').then(res => res.data);
+  }
+  static async kakaoLogin(token: string) {
+    return httpClient.post('/auth/oauth/kakao', {token}).then(res => res.data);
   }
 }

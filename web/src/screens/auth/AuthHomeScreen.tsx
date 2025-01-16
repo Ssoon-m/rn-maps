@@ -1,9 +1,18 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
-import {Dimensions, Image, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
 import Button from '@/shared/components/Button';
-import { authNavigations } from '@/constants';
+import {authNavigations, colors} from '@/constants';
+import Ionicons from '@react-native-vector-icons/ionicons';
 
 type AuthHomeScreenProps = StackScreenProps<AuthStackParamList>;
 
@@ -19,16 +28,22 @@ function AuthHomeScreen({navigation}: AuthHomeScreenProps) {
       </View>
       <View style={styles.buttonContainer}>
         <Button
-          variant="filled"
-          label="로그인하기"
-          onPress={() => navigation.navigate(authNavigations.LOGIN)}
+          label="카카오 로그인하기"
+          onPress={() => navigation.navigate(authNavigations.KAKAO_LOGIN)}
+          style={styles.kakaoButtonContainer}
+          textStyle={styles.kakaoButtonText}
+          icon={
+            <Ionicons name={'chatbubble-sharp'} color={'#181500'} size={16} />
+          }
         />
         <Button
-          variant="outlined"
-          label="회원가입하기"
-          onPress={() => navigation.navigate(authNavigations.SIGNUP)}>
-          회원가입으로 이동
-        </Button>
+          variant="filled"
+          label="이메일 로그인하기"
+          onPress={() => navigation.navigate(authNavigations.LOGIN)}
+        />
+        <Pressable onPress={() => navigation.navigate(authNavigations.SIGNUP)}>
+          <Text style={styles.emailText}>이메일로 가입하기</Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -50,8 +65,21 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
+    alignItems: 'center',
     gap: 10,
     width: '100%',
+  },
+  kakaoButtonText: {
+    color: '#181600',
+  },
+  kakaoButtonContainer: {
+    backgroundColor: '#FEE503',
+  },
+  emailText: {
+    textDecorationLine: 'underline',
+    fontWeight: '500',
+    padding: 10,
+    color: colors.BLACK,
   },
 });
 
