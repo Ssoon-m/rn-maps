@@ -25,6 +25,7 @@ import MarkerModal from '@/screens/map/components/MarkerModal.tsx';
 import {useModal} from '@/shared/hooks/useModal.ts';
 import useMoveMapView from '@/screens/map/hooks/useMoveMapView.ts';
 import Toast from 'react-native-toast-message';
+import useLocationStore from '@/store/useLocationStore.ts';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -36,7 +37,7 @@ function MapHomeScreen() {
   const {logoutMutation} = useAuth();
   const navigation = useNavigation<Navigation>();
   const {userLocation, isUserLocationError} = useUserLocation();
-  const [selectLocation, setSelectLocation] = useState<LatLng>();
+  const {selectLocation, setSelectLocation} = useLocationStore();
   const [markerId, setMarkerId] = useState<number | null>(null);
   const {mapRef, moveMapView, handleChangeDelta} = useMoveMapView();
   const markerModal = useModal();

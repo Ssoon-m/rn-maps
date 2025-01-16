@@ -4,7 +4,7 @@ import {mapNavigations} from '@/constants/navigations';
 import MapHomeScreen from '@/screens/map/MapHomeScreen.tsx';
 import AddPostScreen from '@/screens/map/AddPostScreen.tsx';
 import {LatLng} from 'react-native-maps';
-import SearchLocationScreen from '@/screens/map/components/SearchLocationScreen.tsx';
+import SearchLocationScreen from '@/screens/map/SearchLocationScreen.tsx';
 
 export type MapStackParamList = {
   [mapNavigations.MAP_HOME]: undefined;

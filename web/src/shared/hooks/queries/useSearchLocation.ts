@@ -36,7 +36,15 @@ type RegionResponse = {
 
 function useSearchLocation(keyword: string, location: LatLng) {
   const [regionInfo, setRegionInfo] = useState<RegionInfo[]>([]);
+  const [hasNextPage, setHasNextPage] = useState(false);
   const [pageParam, setPageParam] = useState(1);
+
+  const fetchNextPage = () => {
+    setPageParam(prev => prev + 1);
+  };
+  const fetchPrevPage = () => {
+    setPageParam(prev => prev - 1);
+  };
   useEffect(() => {
     (async () => {
       try {
@@ -54,13 +62,15 @@ function useSearchLocation(keyword: string, location: LatLng) {
             },
           },
         );
+        setHasNextPage(!data.meta.is_end);
         setRegionInfo(data.documents);
       } catch (error) {
         setRegionInfo([]);
       }
     })();
+    keyword === '' && setHasNextPage(true);
   }, [keyword, location]);
-  return {regionInfo};
+  return {regionInfo, pageParam, fetchNextPage, fetchPrevPage, hasNextPage};
 }
 
 export default useSearchLocation;

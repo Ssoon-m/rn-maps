@@ -4,6 +4,7 @@ import useUserLocation from '@/screens/map/hooks/useUserLocation.ts';
 import {useState} from 'react';
 import {colors} from '@/constants';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import SearchRegionResult from '@/screens/map/components/SearchRegionResult.tsx';
 
 function SearchLocationScreen() {
   const [keyword, setKeyword] = useState('');
@@ -37,6 +38,7 @@ function SearchLocationScreen() {
           onPress={() => Keyboard.dismiss()}
         />
       </View>
+      <SearchRegionResult regionInfo={regionInfo} />
     </View>
   );
 }
